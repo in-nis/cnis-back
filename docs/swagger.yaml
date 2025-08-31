@@ -1,0 +1,173 @@
+definitions:
+  api.AddUserGroupRequest:
+    properties:
+      lesson_group:
+        type: string
+      lesson_name:
+        type: string
+    type: object
+  api.UpdateUserGradeRequest:
+    properties:
+      grade:
+        type: integer
+      grade_letter:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/google/callback:
+    get:
+      description: Responds with pong
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      summary: Google Callback
+      tags:
+      - auth
+  /auth/google/login:
+    get:
+      description: Responds with pong
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      summary: Login with Google
+      tags:
+      - auth
+  /user/grade:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the grade and grade letter for the authenticated user
+      parameters:
+      - description: Grade info
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateUserGradeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user's grade
+      tags:
+      - user
+  /user/groups:
+    get:
+      description: Returns all groups for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user's groups
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Adds a new group for the authenticated user
+      parameters:
+      - description: Group info
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.AddUserGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add a user group
+      tags:
+      - user
+  /user/groups/{id}:
+    delete:
+      description: Deletes a group by ID for the authenticated user
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a user group
+      tags:
+      - user
+swagger: "2.0"
